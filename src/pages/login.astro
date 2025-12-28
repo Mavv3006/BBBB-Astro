@@ -1,0 +1,70 @@
+---
+import Heading from "../components/Heading.vue";
+import DefaultLayout from "../layouts/DefaultLayout.astro";
+import InputLabel from "../components/InputLabel.vue";
+import TextInput from "../components/TextInput.vue";
+import PrimaryButton from "../components/PrimaryButton.vue";
+import InputError from "../components/InputError.vue";
+---
+
+<DefaultLayout>
+  <Heading>Login</Heading>
+
+  <!--<div v-if="status" class="mb-4 font-medium text-sm text-green-600">-->
+  <!--  {{ status }}-->
+  <!--</div>-->
+
+  <form
+    class="mx-auto sm:w-7/12 md:w-6/12 lg:w-5/12 xl:w-4/12"
+    @submit.prevent="submit"
+  >
+    <div>
+      <InputLabel for="username" value="Benutzername" />
+
+      <TextInput
+        id="username"
+        v-model="form.name"
+        autocomplete="username"
+        autofocus
+        class="mt-1 block w-full"
+        required
+        type="text"
+      />
+
+      <InputError :message="form.errors.name" class="mt-2" />
+    </div>
+
+    <div class="mt-4">
+      <InputLabel for="password" value="Passwort" />
+
+      <TextInput
+        id="password"
+        v-model="form.password"
+        autocomplete="current-password"
+        class="mt-1 block w-full"
+        required
+        type="password"
+      />
+
+      <InputError :message="form.errors.password" class="mt-2" />
+    </div>
+
+    <div class="flex items-center justify-center mt-4">
+      <!--                <Link-->
+      <!--                    v-if="canResetPassword"-->
+      <!--                    :href="route('password.request')"-->
+      <!--                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"-->
+      <!--                >-->
+      <!--                    Forgot your password?-->
+      <!--                </Link>-->
+
+      <PrimaryButton
+        :class="{ 'opacity-25': form.processing }"
+        :disabled="form.processing"
+        class="ml-4"
+      >
+        Login
+      </PrimaryButton>
+    </div>
+  </form>
+</DefaultLayout>

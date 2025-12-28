@@ -8,7 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://stargazers.club",
+  site: "https://bluebirdbigband.de",
   integrations: [vue(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
