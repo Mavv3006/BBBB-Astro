@@ -1,8 +1,10 @@
 ---
 import Heading from "../components/Heading.vue";
 import DefaultLayout from "../layouts/DefaultLayout.astro";
-import NewsletterSubscribe from "../components/NewsletterSubscribe.vue";
-import NewsletterUnsubscribe from "../components/NewsletterUnsubscribe.vue";
+import Accordion from "../components/Accordion.vue";
+import PrimaryButton from "../components/PrimaryButton.vue";
+import SubHeading from "../components/SubHeading.vue";
+import NavLink from "../components/NavLink.vue";
 ---
 
 <DefaultLayout>
@@ -17,13 +19,153 @@ import NewsletterUnsubscribe from "../components/NewsletterUnsubscribe.vue";
     class="mt-8 flex gap-y-12 flex-col mx-auto max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl"
   >
     <section>
-      <!--<NewsletterSubscribe title="Eintragen" />-->
+      <SubHeading>Eintragen</SubHeading>
+
+      <p class="mb-6">
+        Erhalten Sie die neuesten Updates direkt in Ihrem Posteingang.
+      </p>
+
+      <Accordion client:load title="Wie funktioniert der Anmeldeprozess?">
+        <div class="bg-gray-50 rounded-lg p-4">
+          <ol class="list-decimal list-inside space-y-2 text-gray-600">
+            <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
+            <li>Sie erhalten eine Bestätigungs-E-Mail</li>
+            <li>
+              Klicken Sie auf den Verifizierungslink in der E-Mail, um Ihre
+              Adresse zu bestätigen
+            </li>
+            <li>Unser Team fügt Sie der Newsletter-Liste hinzu</li>
+          </ol>
+        </div>
+      </Accordion>
+
+      <form id="sub-form">
+        <div>
+          <label class="block font-medium text-sm" for="addingEmail"
+            >E-Mail Adresse
+          </label>
+
+          <input
+            class="mt-1 block w-full border-gray-300 focus:border-[#041286] focus:ring-[#041286] rounded-md shadow-xs disabled:text-gray-500"
+            id="addingEmail"
+            required
+            type="email"
+            name="email"
+          />
+
+          <div id="success_message" class="hidden">
+            <p class="text-sm text-green-600">Eintragen beantragt.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-x-2 flex-row mt-4">
+          <input
+            id="data-privacy-consent"
+            class="border-gray-300 focus:border-[#2563EB] focus:ring-[#2563EB] rounded-[5px] shadow-xs disabled:text-gray-500"
+            name="data-privacy-consent"
+            required
+            type="checkbox"
+          />
+          <label class="block font-medium text-sm" for="data-privacy-consent"
+            >Ich habe die
+            <NavLink href="/datenschutz">Datenschutzerklärung</NavLink>
+            gelesen und stimme der Verarbeitung meiner Daten gemäß dieser zu. Ich
+            erhalte den Newsletter mit Informationen zu unseren kommenden Auftritten.
+          </label>
+        </div>
+
+        <div class="flex items-center justify-center mt-4">
+          <PrimaryButton type="submit"> Eintragen </PrimaryButton>
+        </div>
+      </form>
     </section>
 
     <hr />
 
     <section>
-      <!--<NewsletterUnsubscribe />-->
+      <SubHeading id="austragen">Austragen</SubHeading>
+
+      <p class="mb-6">
+        Es tut uns leid, dass Sie gehen. Geben Sie Ihre E-Mail-Adresse ein, um
+        sich abzumelden.
+      </p>
+
+      <Accordion client:load title="Wie funktioniert der Abmeldeprozess?">
+        <div class="bg-gray-50 rounded-lg p-4">
+          <ol class="list-decimal list-inside space-y-2 text-gray-600">
+            <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
+            <li>Unser Team trägt Sie aus der Newsletter-Liste aus</li>
+          </ol>
+        </div>
+      </Accordion>
+
+      <form id="unsub-form">
+        <div>
+          <label class="block font-medium text-sm" for="email"
+            >E-Mail Adresse</label
+          >
+          <input
+            id="email"
+            type="email"
+            name="email"
+            class="border-gray-300 focus:border-[#041286] focus:ring-[#041286] rounded-md shadow-xs disabled:text-gray-500"
+          />
+        </div>
+
+        <div class="flex items-center justify-center mt-4">
+          <PrimaryButton type="submit">Austragen</PrimaryButton>
+        </div>
+      </form>
     </section>
   </div>
 </DefaultLayout>
+
+<script>
+  const forms = {
+    sub: document.getElementById("sub-form") as HTMLFormElement | null,
+    unsub: document.getElementById("unsub-form") as HTMLFormElement | null,
+  };
+  const successMessage = document.getElementById("success_message");
+
+  async function handleFormSubmit(event: SubmitEvent, type: "sub" | "unsub") {
+    event.preventDefault();
+
+    const form = event.currentTarget as HTMLFormElement;
+    const btn = form.querySelector("button");
+    const endpoint = type === "sub" ? "/api/sub" : "/api/unsub";
+
+    if (type === "sub") successMessage?.classList.add("hidden");
+    if (btn) btn.disabled = true;
+
+    const formData = new FormData(form);
+    if (type === "sub") {
+      formData.append("type", "adding");
+      formData.append(
+        "data_privacy_consent_text",
+        "Ich habe die Datenschutzerklärung gelesen...",
+      );
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        form.reset();
+        if (type === "sub") successMessage?.classList.remove("hidden");
+      } else {
+        console.error(`Server responded with ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Error submitting ${type} form:`, error);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  forms.sub?.addEventListener("submit", (e) => handleFormSubmit(e, 'sub'));
+  forms.unsub?.addEventListener("submit", (e) => handleFormSubmit(e, 'unsub'));
+
+</script>
