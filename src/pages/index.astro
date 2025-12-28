@@ -1,13 +1,11 @@
 ---
 import DefaultLayout from "../layouts/DefaultLayout.astro";
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
 import logo from "../assets/grouppictures/2023-05-07-mini.jpg";
 ---
 
 <DefaultLayout>
-  <h1
-    class="text-center font-bold text-[#3d4449] text-xl md:text-3xl lg:text-4xl xl:text-5xl"
-  >
+  <h1 class="text-center font-bold text-[#3d4449] text-xl md:text-3xl lg:text-4xl xl:text-5xl">
     Willkommen bei der
     <br />
     Blue Bird Big Band
@@ -15,21 +13,14 @@ import logo from "../assets/grouppictures/2023-05-07-mini.jpg";
     der Städtischen Musikschule Speyer
   </h1>
 
-  <Image
-    alt="Gruppenbild der Blue Bird Big Band"
-    class="w-[80%] block mx-auto my-4"
-    src={logo}
-  />
+  <Image alt="Gruppenbild der Blue Bird Big Band" class="w-[80%] block mx-auto my-4" src={logo} />
 
   <div class="scroll overflow-hidden relative z-0">
-    <span
-      class="absolute text-lg h-full m-0 text-left text-[#990000] font-bold w-screen tracking-[2px]"
-    >
+    <span class="absolute text-lg h-full m-0 text-left text-[#990000] font-bold w-screen tracking-[2px]">
       +++ Posaunist/in gesucht +++
     </span>
   </div>
 </DefaultLayout>
-
 
 <style>
   .scroll {
@@ -102,7 +93,6 @@ import logo from "../assets/grouppictures/2023-05-07-mini.jpg";
     }
   }
 
-
   @media (min-width: 1536px) {
     .scroll span {
       animation-duration: 24s;
@@ -117,5 +107,4 @@ import logo from "../assets/grouppictures/2023-05-07-mini.jpg";
       }
     }
   }
-
 </style>

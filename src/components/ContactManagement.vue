@@ -1,10 +1,5 @@
 <template>
-  <Contact
-    class="w-1/2"
-    email="buchung@bluebirdbigband.de"
-    name="Buchung"
-    :bold_name="bold_name"
-  />
+  <Contact :bold_name="bold_name" class="w-1/2" email="buchung@bluebirdbigband.de" name="Buchung" />
 </template>
 
 <script setup lang="ts">

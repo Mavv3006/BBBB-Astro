@@ -1,36 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans:
-    Nunito, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-roboto:
-    Roboto Slab, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-open_sans:
-    Open Sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: Nunito, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  "Noto Color Emoji";
+  --font-roboto: Roboto Slab, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-open_sans: Open Sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  "Noto Color Emoji";
 }
 
 @font-face {
   font-family: "Roboto Slab";
-  src: url("../assets/fonts/Roboto_Slab/RobotoSlab-VariableFont_wght.ttf")
-    format("truetype");
+  src: url("../assets/fonts/Roboto_Slab/RobotoSlab-VariableFont_wght.ttf") format("truetype");
   font-style: normal;
   font-weight: 100 900;
 }
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf")
-    format("truetype");
+  src: url("../assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf") format("truetype");
   font-style: normal;
   font-weight: 100 900;
 }
 
 @font-face {
   font-family: "Open Sans";
-  src: url("../assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf")
-    format("truetype");
+  src: url("../assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf") format("truetype");
   font-style: italic;
   font-weight: 100 900;
 }
