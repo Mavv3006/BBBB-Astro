@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/forms";
+
 @theme {
   --font-sans: Nunito, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
   "Noto Color Emoji";
   --font-roboto: Roboto Slab, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-open_sans: Open Sans, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
   "Noto Color Emoji";
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
 @font-face {

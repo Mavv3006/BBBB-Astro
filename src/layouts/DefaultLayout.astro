@@ -1,5 +1,8 @@
 ---
 import "../styles/global.css";
+import headerLogo from "../assets/logos/logo-header.png";
+import DesktopNavigation from "../components/navigation/DesktopNavigation.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 ---
 
 <html lang="de">
@@ -11,6 +14,24 @@ import "../styles/global.css";
     <title>Testing</title>
   </head>
   <body>
+
+  <header class="md:flex md:relative md:flex-col md:justify-center">
+    <div class="relative bg-[#d61000] h-12 mt-2 md:h-[calc(10.125vw-29.5px)] md:min-h-12 max-h-24">
+      <div class="h-full md:w-full">
+        <a class="flex justify-center items-center h-full p-0" href="/">
+          <img src={headerLogo.src} alt="Logo der Blue Bird Big Band" class="max-h-12 pr-11 md:pr-0 md:h-full" />
+        </a>
+      </div>
+
+      <button
+        class="open-mobile-toggle h-12 w-15 absolute top-0 right-0 text-white md:hidden"
+        @click="toggleMobileMenu()"
+      ></button>
+    </div>
+
+    <DesktopNavigation client:load class="hidden md:flex md:w-full"/>
+  </header>
+
     <main
       class="w-[85vw] mt-3 mb-3 mx-auto bg-white rounded-2xl p-4 pt-6 transition-all duration-300 md:pt-8 md:w-[88vw] lg:w-[85vw] xl:w-[80vw] 2xl:w-[75vw]"
     >
@@ -18,3 +39,16 @@ import "../styles/global.css";
     </main>
   </body>
 </html>
+
+<style>
+  @media (min-width: 768px) {
+    img {
+      max-height: unset;
+    }
+  }
+
+  .open-mobile-toggle {
+    background-color: #041286;
+  }
+</style>
+

@@ -14,7 +14,9 @@
     </button>
 
     <div class="pb-4" v-if="isOpen">
-      <slot />
+      <div class="bg-blue-50 rounded-md p-4">
+        <slot />
+      </div>
     </div>
   </div>
 </template>

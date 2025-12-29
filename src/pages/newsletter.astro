@@ -19,14 +19,12 @@ import NavLink from "../components/NavLink.vue";
       <p class="mb-6">Erhalten Sie die neuesten Updates direkt in Ihrem Posteingang.</p>
 
       <Accordion client:load title="Wie funktioniert der Anmeldeprozess?">
-        <div class="bg-gray-50 rounded-lg p-4">
-          <ol class="list-decimal list-inside space-y-2 text-gray-600">
-            <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
-            <li>Sie erhalten eine Bestätigungs-E-Mail</li>
-            <li>Klicken Sie auf den Verifizierungslink in der E-Mail, um Ihre Adresse zu bestätigen</li>
-            <li>Unser Team fügt Sie der Newsletter-Liste hinzu</li>
-          </ol>
-        </div>
+        <ol class="list-decimal list-inside space-y-2">
+          <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
+          <li>Sie erhalten eine Bestätigungs-E-Mail</li>
+          <li>Klicken Sie auf den Verifizierungslink in der E-Mail, um Ihre Adresse zu bestätigen</li>
+          <li>Unser Team fügt Sie der Newsletter-Liste hinzu</li>
+        </ol>
       </Accordion>
 
       <form id="sub-form">
@@ -34,7 +32,7 @@ import NavLink from "../components/NavLink.vue";
           <label class="block font-medium text-sm" for="addingEmail">E-Mail Adresse </label>
 
           <input
-            class="mt-1 block w-full border-gray-300 focus:border-[#041286] focus:ring-[#041286] rounded-md shadow-xs disabled:text-gray-500"
+            class="mt-1 block w-full border-gray-300 focus:border-blue-800 focus:ring-blue-800 rounded-md shadow-xs disabled:text-gray-500"
             id="addingEmail"
             required
             type="email"
@@ -49,7 +47,7 @@ import NavLink from "../components/NavLink.vue";
         <div class="flex gap-x-2 flex-row mt-4">
           <input
             id="data-privacy-consent"
-            class="border-gray-300 focus:border-[#2563EB] focus:ring-[#2563EB] rounded-[5px] shadow-xs disabled:text-gray-500"
+            class="border-gray-300 checked:bg-blue-800 focus:border-blue-800 focus:ring-blue-800 rounded-[5px] shadow-xs disabled:text-gray-500"
             name="data-privacy-consent"
             required
             type="checkbox"
@@ -76,12 +74,10 @@ import NavLink from "../components/NavLink.vue";
       <p class="mb-6">Es tut uns leid, dass Sie gehen. Geben Sie Ihre E-Mail-Adresse ein, um sich abzumelden.</p>
 
       <Accordion client:load title="Wie funktioniert der Abmeldeprozess?">
-        <div class="bg-gray-50 rounded-lg p-4">
-          <ol class="list-decimal list-inside space-y-2 text-gray-600">
-            <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
-            <li>Unser Team trägt Sie aus der Newsletter-Liste aus</li>
-          </ol>
-        </div>
+        <ol class="list-decimal list-inside space-y-2">
+          <li>Geben Sie Ihre E-Mail-Adresse im Formular unten ein</li>
+          <li>Unser Team trägt Sie aus der Newsletter-Liste aus</li>
+        </ol>
       </Accordion>
 
       <form id="unsub-form">
@@ -91,7 +87,8 @@ import NavLink from "../components/NavLink.vue";
             id="email"
             type="email"
             name="email"
-            class="border-gray-300 focus:border-[#041286] focus:ring-[#041286] rounded-md shadow-xs disabled:text-gray-500"
+            required
+            class="mt-1 block w-full border-gray-300 focus:border-blue-800 focus:ring-blue-800 rounded-md shadow-xs disabled:text-gray-500"
           />
         </div>
 
@@ -104,6 +101,9 @@ import NavLink from "../components/NavLink.vue";
 </DefaultLayout>
 
 <script>
+  import { api } from "../lib/api.ts";
+  import axios from "axios";
+
   const forms = {
     sub: document.getElementById("sub-form") as HTMLFormElement | null,
     unsub: document.getElementById("unsub-form") as HTMLFormElement | null,
@@ -123,26 +123,30 @@ import NavLink from "../components/NavLink.vue";
     const formData = new FormData(form);
     if (type === "sub") {
       formData.append("type", "adding");
-      formData.append("data_privacy_consent_text", "Ich habe die Datenschutzerklärung gelesen...");
+      formData.append(
+        "data_privacy_consent_text",
+        "Ich habe die Datenschutzerklärung gelesen und stimme der Verarbeitung meiner Daten gemäß dieser zu. Ich erhalte den Newsletter mit Informationen zu unseren kommenden Auftritten.",
+      );
     }
 
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
+    api
+      .post(endpoint, formData)
+      .then((response) => {
         form.reset();
         if (type === "sub") successMessage?.classList.remove("hidden");
-      } else {
-        console.error(`Server responded with ${response.status}`);
-      }
-    } catch (error) {
-      console.error(`Error submitting ${type} form:`, error);
-    } finally {
-      if (btn) btn.disabled = false;
-    }
+        console.debug(`${type}_form success:`, response.data);
+      })
+      .catch((error) => {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message || "Ein Fehler ist aufgetreten";
+          console.error(`Status: ${error.response?.status}`, message);
+        } else {
+          console.error("An unexpected error occurred:", error);
+        }
+      })
+      .finally(() => {
+        if (btn) btn.disabled = false;
+      });
   }
 
   forms.sub?.addEventListener("submit", (e) => handleFormSubmit(e, "sub"));
